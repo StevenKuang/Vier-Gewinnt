@@ -16,6 +16,25 @@ __author__ = "6815480: Liming Kuang, 5613641: Melanie Wester"
 __credits__ = "" 
 __email__ = "limingkuang@gmail.com, s9108655@stud.uni-frankfurt.de"
 
+def is_full(board):
+    """is_full is a function which determines if the chess board is full.
+    If the chess board is already full then return True
+    """
+    for j in range(10):
+        if board[0][j] == None:
+            return False
+    return True
+    
+def is_able_to_drop(col, board):
+    """is_able_to_drop is a function to check if this column is valid for dropping a disk
+    The col here is the user input, which is not the index of the list.
+    This function return True if it's possible to drop a disk at this column.
+    """
+    if col <= 10 and col >= 1 and board[0][col-1] == None:
+        return True
+    else:
+        return False
+
 def print_matrix(lst):
     """A simple function to print a 2 dimentional list elegantly. """
     print('\n'.join(['\t'.join([str(i) for i in row]) for row in lst]))
