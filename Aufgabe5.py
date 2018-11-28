@@ -12,8 +12,6 @@ import numpy as np
 #from numpy import array       #another example for third party module
 #import meinmodul              #example for your own module
 
-TEST HIHIHIHIH STEVEN KUANG
-hi! back
 __author__ = "6815480: Liming Kuang, 654321: Terry Gilliam"  
 __credits__ = "" 
 __email__ = "limingkuang@gmail.com, "
