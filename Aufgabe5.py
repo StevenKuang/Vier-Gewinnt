@@ -1,7 +1,7 @@
 """
 Aufgabenblatt 5 EPR
 Group 11
-Author: Liming Kuang -- 6815480, Melonie
+Author: Liming Kuang -- 6815480, Melanie Wester -- 5613641
 Tutor: Felix Lapp
 
 This is a simple python implementation of a modofied version of 
@@ -12,9 +12,9 @@ import numpy as np
 #from numpy import array       #another example for third party module
 #import meinmodul              #example for your own module
 
-__author__ = "6815480: Liming Kuang, 654321: Terry Gilliam"  
+__author__ = "6815480: Liming Kuang, 5613641: Melanie Wester"  
 __credits__ = "" 
-__email__ = "limingkuang@gmail.com, "
+__email__ = "limingkuang@gmail.com, s9108655@stud.uni-frankfurt.de"
 
 def print_matrix(lst):
     """A simple function to print a 2 dimentional list elegantly. """
