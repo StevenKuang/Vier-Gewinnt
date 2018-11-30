@@ -7,10 +7,7 @@ Tutor: Felix Lapp
 This is a simple python implementation of a modofied version of 
 the game "Connect Four"
 """
-import numpy as np
-#from math import sqrt, log, e  #an example for modules from the standard bib
-#from numpy import array       #another example for third party module
-#import meinmodul              #example for your own module
+import os, copy, sys
 
 __author__ = "6815480: Liming Kuang, 5613641: Melanie Wester"  
 __credits__ = "" 
