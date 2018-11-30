@@ -17,7 +17,12 @@ __credits__ = ""
 __email__ = "limingkuang@gmail.com, s9108655@stud.uni-frankfurt.de"
 
 def is_full(board):
-    """is_full is a function which determines if the chess board is full"""
+    """is_full is a function which determines if the chess board is full
+    board: the chess board that's being currently used
+    This function returns True or False:
+    True: this chess board is already full
+    False: this chess board is still not full
+    """
     for j in range(10):
         if board[0][j] == None:
             return False
@@ -25,7 +30,8 @@ def is_full(board):
     
 def is_able_to_drop(col, board):
     """is_able_to_drop is a function to check if this column is valid for dropping a disk
-    The col here is the index of the list
+    board: the chess board that's being currently used
+    col: the index of the list
     """
     if (col < 10 and col >= 0) and board[0][col] == None:
         return True
@@ -33,7 +39,14 @@ def is_able_to_drop(col, board):
         return False
 
 def drop_disk(board, column, player):
-    """drop_disk is a function to play a disk at the top of a specific column"""
+    """drop_disk is a function to play a disk at the top of a specific column
+    This function takes 3 parameters:
+    board: the chess board that's being currently used
+    column: an int, indicates the column where the user want to drop the disk
+    player: a list, that contains information about the current player.
+            It has the structure of [str, str, str]
+            e.g.:['Player 1', 'Liming', 'X']
+    """
     for i in range (0,9):
         if i <= 7 and board[i][column] == None and board[i+1][column] != None:
             board[i][column] = player[2]
@@ -60,6 +73,9 @@ def match(b):
     """match is a function to determine if any one of the players has won the game.
     It takes the baord and the location of the last played disk as parameters.
     b for board, val for value
+    This function returns True or False:
+    True: Someone has won the game
+    False: There's currently no one's won the game
     """
     flag = False
     for i in range(8): 
@@ -98,8 +114,46 @@ def match(b):
                     (b[i+1][j] == val and b[i+1][j-1] == val and b[i+2][j-1] == val)):
                         flag = True
     return flag
-def a_round(board, player_ls, cnt):
-    """a_round is the function where a round of the game starts and iterates"""
+def restart_or_quit():
+    """restart_or_quit is a function that determines if the player wants to restart the game,
+    or quit it. It takes no parameter and returns 0 or 1:
+    0 for restart the game
+    1 for quit the game
+    """
+    while True:
+        print("Press enter if you want to restart the game,"+
+        " and enter 'q' if you want to quit the game!")
+        opt = sys.stdin.readline()
+        if opt == '\n':
+            return 0
+        elif opt == "q\n":
+            return 1
+        else:
+            print("This input is invalid.")
+def win(player_name, board):
+    """win is a function that determines what to do when one player has won the game.
+    This function takes 2 parameters:
+    player_name: a string that contains the name of the winner.
+    board: the chess board that's being currently used
+    This function returns 0 or 1:
+    0 for restart the game
+    1 for quit the game
+    """
+    os.system('cls')
+    print(player_name + " has won the game!")
+    print_matrix(board)
+    return restart_or_quit()
+
+def a_round(board, player_ls, cnt = 0):
+    """a_round is the function where a round of the game starts and iterates
+    This function takes 3 parameters:
+    board: the chess board that's being currently used
+    player_ls: the list of player
+    cnt: select which player to start from, default is set to 0
+    This function returns 0 or 1:
+    0 for restart the game
+    1 for quit the game
+    """
     someone_win = False
     while not someone_win:
         now = cnt % 2
@@ -114,27 +168,31 @@ def a_round(board, player_ls, cnt):
                     drop_disk(board, column, player_ls[now])
                     print_matrix(board)
                     if match(board):
-                        print(player_ls[now][1] + " has won the game!")
                         someone_win = True
+                        return win(player_ls[now][1], board)
                     break
                 else:
                     if is_full(board):
-                        print("The chess board is full and no one's won the game. Press enter to restart.")
+                        print("The chess board is full and no one's won the game.")
+                        return restart_or_quit()
                     print("This column is already full, please choose another column.")
 
             else:
                 print("Invalid input, please enter a column index between 1 and 10.")
         cnt += 1
+    return 1 # exit the program
             
 def main():
     """Here to start this module from the console or shell. """
-    board=[]            # create an empty 9*10 chess board
-    for i in range(9): 
-        row=[] 
-        for j in range(10): 
-            row.append(None) 
-        board.append(row) 
-    player_list = [['Player 1', 'Marshall', 'X'], ['Player 2', 'Mathers', 'O']] # just for testing
-    a_round(board, player_list, 0)
+    while True:         # use the while loop to realise the 'restart game' function
+        board=[]            # create an empty 9*10 chess board
+        for i in range(9): 
+            row=[] 
+            for j in range(10): 
+                row.append(None) 
+            board.append(row)
+        player_list = [['Player 1', 'Marshall', 'X'], ['Player 2', 'Mathers', 'O']]
+        if a_round(board, player_list) == 1:
+            break
 if __name__ == '__main__':
     main()
