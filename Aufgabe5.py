@@ -152,8 +152,8 @@ def match(b):
             else:
                 if i == 0: # first line
                     if j == 8:
-                        if (b[i+1][j] == val and b[i+1][j+1] == val and b[i+2][j+1] == val) or
-                        (b[i+1][j] == val and b[i+1][j-1] == val and b[i+2][j-1] == val):
+                        if ((b[i+1][j] == val and b[i+1][j+1] == val and b[i+2][j+1] == val) or
+                        (b[i+1][j] == val and b[i+1][j-1] == val and b[i+2][j-1] == val)):
                             flag = True
                     else:
                         if ((b[i][j+1] == val and b[i+1][j+1] == val and b[i+1][j+2] == val) or
