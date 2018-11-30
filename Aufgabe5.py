@@ -129,12 +129,12 @@ def print_matrix(lst):
                 lst_out[i][j] = ''
     print("1\t2\t3\t4\t5\t6\t7\t8\t9\t10")
     print('\n'.join(['\t'.join([str(i) for i in row]) for row in lst_out]))
-
     
 def match(b):
     """match is a function to determine if any one of the players has won the game.
     It takes the baord and the location of the last played disk as parameters.
-    b for board, val for value
+    since if I use board the programm's gonna be too long in each line. 
+    So I use b for board, val for value.
     This function returns True or False:
     True: Someone has won the game
     False: There's currently no one's won the game
@@ -150,15 +150,16 @@ def match(b):
             if val == None:
                 pass
             else:
-                if i == 0:
+                if i == 0: # first line
                     if j == 8:
-                        if b[i+1][j] == val and b[i+1][j+1] == val and b[i+2][j+1] == val:
+                        if (b[i+1][j] == val and b[i+1][j+1] == val and b[i+2][j+1] == val) or
+                        (b[i+1][j] == val and b[i+1][j-1] == val and b[i+2][j-1] == val):
                             flag = True
                     else:
                         if ((b[i][j+1] == val and b[i+1][j+1] == val and b[i+1][j+2] == val) or
                         (b[i+1][j] == val and b[i+1][j+1] == val and b[i+2][j+1] == val)):
                             flag = True
-                elif i == 7:
+                elif i == 7: # 2nd last line
                     if j == 8:
                         pass
                     else:
@@ -176,7 +177,6 @@ def match(b):
                     (b[i+1][j] == val and b[i+1][j-1] == val and b[i+2][j-1] == val)):
                         flag = True
     return flag
-
 
 def restart_or_quit():
     """restart_or_quit is a function that determines if the player wants to restart the game,
