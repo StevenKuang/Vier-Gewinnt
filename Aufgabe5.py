@@ -51,6 +51,7 @@ def choose_players():
         print(player_nr + ", your name is " + player_name)
         while True:
             keep_name = input("Would you like to keep the name " + player_name + "? y/n >>> ")
+            keep_name = keep_name.lower()
             if keep_name == "y":
                 player_list.append([player_nr, player_name])
                 if count == 1:
