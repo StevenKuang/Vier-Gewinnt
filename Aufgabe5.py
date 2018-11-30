@@ -271,3 +271,10 @@ def main():
             
 if __name__ == '__main__':
     main()
+    
+
+'''
+SOURCES:
+http://www.lojol.de/html/4gewinnt.html
+https://www.youtube.com/watch?v=XOga3EhS59c
+'''
