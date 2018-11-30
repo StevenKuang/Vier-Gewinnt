@@ -25,9 +25,9 @@ def is_full(board):
     
 def is_able_to_drop(col, board):
     """is_able_to_drop is a function to check if this column is valid for dropping a disk
-    The col here is the user input, which is not the index of the list
+    The col here is the index of the list
     """
-    if col <= 10 and col >= 1 and board[0][col-1] == None:
+    if (col < 10 and col >= 0) and board[0][col] == None:
         return True
     else:
         return False
@@ -39,10 +39,22 @@ def drop_disk(board, column, player):
             board[i][column] = player[2]
         elif i == 8 and board[i][column] == None:
             board[i][column] = player[2]
-
+# ◉◎
 def print_matrix(lst):
-    """A simple function to print a 2 dimentional list elegantly. """
-    print('\n'.join(['\t'.join([str(i) for i in row]) for row in lst]))
+    """A simple function to print a 2 dimentional list elegantly. 
+    ◉◎ looks better than X and O so we use these too.
+    """
+    lst_out = copy.deepcopy(lst)
+    for i in range (9):
+        for j in range (10):
+            if lst_out[i][j] == 'O':
+                lst_out[i][j] = '◉'
+            elif lst_out[i][j] == 'X':
+                lst_out[i][j] = '◎'
+            else:
+                lst_out[i][j] = ''
+    print("1\t2\t3\t4\t5\t6\t7\t8\t9\t10")
+    print('\n'.join(['\t'.join([str(i) for i in row]) for row in lst_out]))
 
 def match(b):
     """match is a function to determine if any one of the players has won the game.
@@ -98,17 +110,20 @@ def a_round(board, player_ls, cnt):
             raw_cl = input("Please enter the column that you want to play: ")
             if raw_cl.isdigit() and int(raw_cl) >= 1 and int(raw_cl) <= 10:
                 column = int(raw_cl) - 1
-                break
+                if is_able_to_drop(column, board):
+                    drop_disk(board, column, player_ls[now])
+                    print_matrix(board)
+                    if match(board):
+                        print(player_ls[now][1] + " has won the game!")
+                        someone_win = True
+                    break
+                else:
+                    if is_full(board):
+                        print("The chess board is full and no one's won the game. Press enter to restart.")
+                    print("This column is already full, please choose another column.")
+
             else:
                 print("Invalid input, please enter a column index between 1 and 10.")
-        if is_able_to_drop(column, board):
-            drop_disk(board, column, player_ls[now])
-            print_matrix(board)
-        if match(board):
-            print(player_ls[now][1] + " has won the game!")
-            someone_win = True
-        if is_full(board):
-            print("The chess board is full and no one's won the game. Press enter to restart.")
         cnt += 1
             
 def main():
