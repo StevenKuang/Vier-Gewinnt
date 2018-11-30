@@ -45,7 +45,6 @@ def choose_players():
     number_players = repeat_input("Please enter a number of players between 1 and 2", 1, 2)
     count = 1
     while count <= number_players:
-        cls()
         player_nr = "Player " + str(count)
         player_name = input("Please enter your name " + player_nr + " >>> ")
         cls()
@@ -264,7 +263,7 @@ def main():
             for j in range(10): 
                 row.append(None) 
             board.append(row)
-        player_list = [['Player 1', 'Marshall', 'X'], ['Player 2', 'Mathers', 'O']]  # Testing
+        # player_list = [['Player 1', 'Marshall', 'X'], ['Player 2', 'Mathers', 'O']]  # Testing
         if a_round(board, player_list) == 1:
             break
 
