@@ -158,7 +158,8 @@ def a_round(board, player_ls, cnt = 0):
         print("Now it's " + player_ls[now][1] + "'s turn.")
         print_matrix(board)
         while True:
-            raw_cl = input("Please enter the column that you want to play: ")
+            raw_cl = input("Please enter the column that you want to play. (If you want to quit, "+
+            "please enter 'q'. If you want to restart the game, please enter 'r')\n")
             if raw_cl.isdigit() and int(raw_cl) >= 1 and int(raw_cl) <= 10:
                 column = int(raw_cl) - 1
                 if is_able_to_drop(column, board):
@@ -173,7 +174,10 @@ def a_round(board, player_ls, cnt = 0):
                         print("The chess board is full and no one's won the game.")
                         return restart_or_quit()
                     print("This column is already full, please choose another column.")
-
+            elif raw_cl == 'q':
+                return 1
+            elif raw_cl == 'r':
+                return 0
             else:
                 print("Invalid input, please enter a column index between 1 and 10.")
         cnt += 1
