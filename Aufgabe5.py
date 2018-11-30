@@ -204,7 +204,7 @@ def win(player_name, board):
     0 for restart the game
     1 for quit the game
     """
-    os.system('cls')
+    cls()
     print(player_name + " has won the game!")
     print_matrix(board)
     return restart_or_quit()
@@ -223,7 +223,7 @@ def a_round(board, player_ls, cnt = 0):
     someone_win = False
     while not someone_win:
         now = cnt % 2
-        os.system('cls')
+        cls()
         print("Now it's " + player_ls[now][1] + "'s turn.")
         print_matrix(board)
         while True:
