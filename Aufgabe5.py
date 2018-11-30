@@ -4,7 +4,7 @@ Group 11
 Author: Liming Kuang -- 6815480, Melanie Wester -- 5613641
 Tutor: Felix Lapp
 
-This is a simple python implementation of a modofied version of 
+This is a simple python implementation of a modified version of 
 the game "Connect Four"
 """
 import os, copy, sys
@@ -12,6 +12,66 @@ import os, copy, sys
 __author__ = "6815480: Liming Kuang, 5613641: Melanie Wester"  
 __credits__ = "" 
 __email__ = "limingkuang@gmail.com, s9108655@stud.uni-frankfurt.de"
+# ________________________________________________________________________________________
+
+
+def cls():
+    """cls is a function which clears the screen from the terminal or cmd"""
+    os.system('cls' if os.name == 'nt' else 'clear')
+    
+
+def repeat_input(message, min_value, max_value):
+    """repeat_input is a function which requests an integer between 2 values from an user.
+    clears screen if user chooses values which are not in the requested range"""
+    while True:
+        player_input = input(message + " >>> ")
+        try:
+            player_input = int(player_input)
+            if min_value <= player_input <= max_value:
+                print("You chose", player_input)
+                return (player_input)
+            cls()
+            print("Please enter an integer between " + str(min_value) + " and " + str(max_value) + ". ")
+        except ValueError:
+            cls()
+            print("This is no valid input.")
+            
+           
+def choose_players():
+    """choose_players is a function which creates a list with all participating Players,
+    their names and which coin they use"""
+    print('\n')
+    player_list = []
+    number_players = repeat_input("Please enter a number of players between 1 and 2", 1, 2)
+    count = 1
+    while count <= number_players:
+        cls()
+        player_nr = "Player " + str(count)
+        player_name = input("Please enter your name " + player_nr + " >>> ")
+        cls()
+        print(player_nr + ", your name is " + player_name)
+        while True:
+            keep_name = input("Would you like to keep the name " + player_name + "? y/n >>> ")
+            if keep_name == "y":
+                player_list.append([player_nr, player_name])
+                if count == 1:
+                    player_list[0].append('X')
+                else:
+                    player_list[1].append('O')
+                count += 1
+                break
+            elif keep_name == "n":
+                break
+            else:
+                cls()
+                print("This is no valid input")
+    if len(player_list) == 1:
+        player_list.append(["Player 2", "Computer", 'O'])
+    cls()
+    print(player_list[0][1] + ", your coin is " + player_list[0][2])
+    print(player_list[1][1] + ", your coin is " + player_list[1][2])
+    return player_list
+
 
 def is_full(board):
     """is_full is a function which determines if the chess board is full
@@ -25,6 +85,7 @@ def is_full(board):
             return False
     return True
     
+    
 def is_able_to_drop(col, board):
     """is_able_to_drop is a function to check if this column is valid for dropping a disk
     board: the chess board that's being currently used
@@ -35,6 +96,7 @@ def is_able_to_drop(col, board):
     else:
         return False
 
+    
 def drop_disk(board, column, player):
     """drop_disk is a function to play a disk at the top of a specific column
     This function takes 3 parameters:
@@ -49,6 +111,8 @@ def drop_disk(board, column, player):
             board[i][column] = player[2]
         elif i == 8 and board[i][column] == None:
             board[i][column] = player[2]
+
+
 # ◉◎
 def print_matrix(lst):
     """A simple function to print a 2 dimentional list elegantly. 
@@ -66,6 +130,7 @@ def print_matrix(lst):
     print("1\t2\t3\t4\t5\t6\t7\t8\t9\t10")
     print('\n'.join(['\t'.join([str(i) for i in row]) for row in lst_out]))
 
+    
 def match(b):
     """match is a function to determine if any one of the players has won the game.
     It takes the baord and the location of the last played disk as parameters.
@@ -111,6 +176,8 @@ def match(b):
                     (b[i+1][j] == val and b[i+1][j-1] == val and b[i+2][j-1] == val)):
                         flag = True
     return flag
+
+
 def restart_or_quit():
     """restart_or_quit is a function that determines if the player wants to restart the game,
     or quit it. It takes no parameter and returns 0 or 1:
@@ -127,6 +194,8 @@ def restart_or_quit():
             return 1
         else:
             print("This input is invalid.")
+            
+            
 def win(player_name, board):
     """win is a function that determines what to do when one player has won the game.
     This function takes 2 parameters:
@@ -140,6 +209,7 @@ def win(player_name, board):
     print(player_name + " has won the game!")
     print_matrix(board)
     return restart_or_quit()
+
 
 def a_round(board, player_ls, cnt = 0):
     """a_round is the function where a round of the game starts and iterates
@@ -182,9 +252,11 @@ def a_round(board, player_ls, cnt = 0):
                 print("Invalid input, please enter a column index between 1 and 10.")
         cnt += 1
     return 1 # exit the program
-            
+     
+    
 def main():
     """Here to start this module from the console or shell. """
+    player_list = choose_players()  # gives a list with players name and which coin they uses
     while True:         # use the while loop to realise the 'restart game' function
         board=[]            # create an empty 9*10 chess board
         for i in range(9): 
@@ -192,8 +264,10 @@ def main():
             for j in range(10): 
                 row.append(None) 
             board.append(row)
-        player_list = [['Player 1', 'Marshall', 'X'], ['Player 2', 'Mathers', 'O']]
+        player_list = [['Player 1', 'Marshall', 'X'], ['Player 2', 'Mathers', 'O']]  # Testing
         if a_round(board, player_list) == 1:
             break
+
+            
 if __name__ == '__main__':
     main()
