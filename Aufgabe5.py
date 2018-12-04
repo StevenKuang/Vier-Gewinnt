@@ -107,7 +107,7 @@ def to_check_list(board):
     list_to_check = []
     for i in range (10):
         list_to_check.append((where_to_drop(board, i),i))
-       return list_to_check
+    return list_to_check
     
 def drop_disk(board, column, player):
     """drop_disk is a function to play a disk at the top of a specific column
