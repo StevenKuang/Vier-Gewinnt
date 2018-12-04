@@ -271,7 +271,11 @@ def a_round(board, player_ls, cnt = 0):
                 print("Invalid input, please enter a column index between 1 and 10.")
         cnt += 1
     return 1 # exit the program
+
+
 def ways_have_gone(color, board):
+    """ways_have_gone is a function for the KI which scores each field (i,j) based on
+    how many coins are left to make a win"""
     list_to_check = to_check_list(board)
     list_of_score = [None] * 10
 
@@ -341,6 +345,7 @@ def ways_have_gone(color, board):
                     score -= 1
         list_of_score[y] = score    
     return list_of_score     
+    
     
 def main():
     """Here to start this module from the console or shell. """
