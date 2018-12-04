@@ -271,7 +271,76 @@ def a_round(board, player_ls, cnt = 0):
                 print("Invalid input, please enter a column index between 1 and 10.")
         cnt += 1
     return 1 # exit the program
-     
+def ways_have_gone(color, board):
+    list_to_check = to_check_list(board)
+    list_of_score = [None] * 10
+
+    work_b = copy.deepcopy(board)
+    for i in work_b:
+        i.insert(0, None)
+        i.insert(0, None)
+        i.append(None)
+        i.append(None)
+    for (x,y) in list_to_check:
+        i = x
+        j = y + 2 
+        score = 3
+        if work_b[i][j-1] != color and work_b[i][j+1] != color: # nothing on left and right side
+            if i == 8:
+                pass
+            elif work_b[i+1][j] == color:
+                score -= 1
+                if work_b[i+1][j-1] == color or work_b[i+1][j+1] == color:
+                    score -= 1
+                    if i == 7:
+                        pass
+                    elif ((work_b[i+1][j-1] == color and work_b[i+2][j-1] == color) or
+                    (work_b[i+1][j-1] == color and work_b[i+2][j-1] == color)):
+                        score =- 1
+        elif work_b[i][j-1] == color: # there is a match to the left
+            score -= 1
+            if i == 8:
+                if work_b[i-1][j-1] == color:
+                    score -= 1
+                    if work_b[i-1][j-2] == color:
+                        score -= 1
+            elif work_b[i+1][j-1] == color:     # Fig 1
+                score -= 1
+                if work_b[i+1][j-2] == color:
+                    score -= 1
+            elif work_b[i+1][j] == color:       # Fig 2
+                score -= 1
+                if work_b[i+1][j+1] == color:
+                    score -= 1
+            elif (work_b[i+1][j] == color) or (work_b[i-1][j-1] == color):      # Fig 3
+                score -= 1
+                if (work_b[i+1][j] == color) and (work_b[i-1][j-1] == color):
+                    score -= 1
+        elif work_b[i][j+1] == color: # there is a match to the right
+            score -= 1
+            if i == 8:
+                if work_b[i-1][j+1] == color:
+                    score -= 1 
+                    if work_b[i-1][j+2] == color:
+                        score -= 1
+            elif work_b[i-1][j+1] == color:     # Fig 1_1
+                score -= 1 
+                if work_b[i-1][j+2] == color:
+                    score -= 1
+            elif work_b[i+1][j] == color:       # Fig 1_2
+                score -= 1
+                if work_b[i+1][j-1] == color:
+                    score -= 1
+            elif work_b[i+1][j+1] == color:
+                score -= 1
+                if work_b[i+1][j+2] == color:
+                    score -= 1
+            elif work_b[i+1][j] == color or work_b[i-1][j+1]:
+                score -= 1
+                if work_b[i+1][j] == color and work_b[i-1][j+1]:
+                    score -= 1
+        list_of_score[y] = score    
+    return list_of_score     
     
 def main():
     """Here to start this module from the console or shell. """
