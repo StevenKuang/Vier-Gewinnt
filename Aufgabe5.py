@@ -96,6 +96,18 @@ def is_able_to_drop(col, board):
     else:
         return False
 
+def where_to_drop(board, column):
+    for i in range (0,9):
+        if i <= 7 and board[i][column] == None and board[i+1][column] != None:
+            return i
+        elif i == 8 and board[i][column] == None:
+            return i
+
+def to_check_list(board):
+    list_to_check = []
+    for i in range (10):
+        list_to_check.append((where_to_drop(board, i),i))
+       return list_to_check
     
 def drop_disk(board, column, player):
     """drop_disk is a function to play a disk at the top of a specific column
