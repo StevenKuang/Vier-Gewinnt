@@ -31,7 +31,7 @@ def repeat_input(message, min_value, max_value):
                 print("You chose", player_input)
                 return (player_input)
             cls()
-            print("Please enter an integer between " + str(min_value) + " and " + str(max_value) + ". ")
+            # print("Please enter an integer between " + str(min_value) + " and " + str(max_value) + ". ")
         except ValueError:
             cls()
             print("This is no valid input.")
@@ -96,18 +96,24 @@ def is_able_to_drop(col, board):
     else:
         return False
 
+    
 def where_to_drop(board, column):
+    """It returns the i in the (i,j) where the Player would be able to drop next""" 
     for i in range (0,9):
         if i <= 7 and board[i][column] == None and board[i+1][column] != None:
             return i
         elif i == 8 and board[i][column] == None:
             return i
 
+        
 def to_check_list(board):
+    """It returns every (i,j) where the Computer would
+    be able to drop next"""
     list_to_check = []
     for i in range (10):
         list_to_check.append((where_to_drop(board, i),i))
     return list_to_check
+    
     
 def drop_disk(board, column, player):
     """drop_disk is a function to play a disk at the top of a specific column
@@ -189,6 +195,7 @@ def match(b):
                     (b[i+1][j] == val and b[i+1][j-1] == val and b[i+2][j-1] == val)):
                         flag = True
     return flag
+
 
 def restart_or_quit():
     """restart_or_quit is a function that determines if the player wants to restart the game,
