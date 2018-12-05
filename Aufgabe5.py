@@ -158,7 +158,7 @@ def match(b):
     False: There's currently no one's won the game
     """
     flag = False
-    for i in range(8): 
+    for i in range(9): 
         for j in range(9): 
             val = b[i][j]
             # a = b[i][j+1] == val and b[i-1][j+1] == val and b[i-1][j+2] == val
@@ -183,6 +183,12 @@ def match(b):
                     else:
                         if ((b[i][j+1] == val and b[i-1][j+1] == val and b[i-1][j+2] == val) or 
                         (b[i][j+1] == val and b[i+1][j+1] == val and b[i+1][j+2] == val)):
+                            flag = True
+                elif i == 8:
+                    if j == 8:
+                        pass
+                    else:
+                        if (b[i][j+1] == val and b[i-1][j+1] == val and b[i-1][j+2] == val):
                             flag = True
                 elif j == 8:
                     if ((b[i+1][j] == val and b[i+1][j+1] == val and b[i+2][j+1] == val) or 
@@ -273,12 +279,32 @@ def a_round(board, player_ls, cnt = 0):
     return 1 # exit the program
 
 
+def where_to_drop(board, column):
+    """It returns the i in (i,j) of the point"""
+    for i in range (0,9):
+        if i <= 7 and board[i][column] == None and board[i+1][column] != None:
+            return i
+        elif i == 8 and board[i][column] == None:
+            return i
+
+def to_check_list(board):
+    list_to_check = []
+    for i in range (10):
+        list_to_check.append((where_to_drop(board, i),i))
+    return list_to_check
+
 def ways_have_gone(color, board):
-    """ways_have_gone is a function for the KI which scores each field (i,j) based on
+    """ways_have_gone is a function for the KI which scores each field (i,j) based on 
     how many coins are left to make a win"""
     list_to_check = to_check_list(board)
+    for (i, j) in list_to_check:
+        if i == None:
+            list_to_check.remove((i, j))
     list_of_score = [None] * 10
-
+    if color == 'X':
+        anti_color = 'O'
+    elif color == 'O':
+        anti_color = 'X'
     work_b = copy.deepcopy(board)
     for i in work_b:
         i.insert(0, None)
@@ -286,66 +312,194 @@ def ways_have_gone(color, board):
         i.append(None)
         i.append(None)
     for (x,y) in list_to_check:
-        i = x
-        j = y + 2 
-        score = 3
-        if work_b[i][j-1] != color and work_b[i][j+1] != color: # nothing on left and right side
-            if i == 8:
-                pass
-            elif work_b[i+1][j] == color:
-                score -= 1
-                if work_b[i+1][j-1] == color or work_b[i+1][j+1] == color:
+        if x == None:
+            list_of_score[y] = None 
+        else:
+            i = x
+            j = y + 2 
+            score = 3
+            if work_b[i][j-1] != color and work_b[i][j+1] != color: # nothing on left and right side
+                if i == 8:
+                    pass
+                elif work_b[i+1][j] == color:
                     score -= 1
-                    if i == 7:
+                    if work_b[i+1][j-1] == anti_color or work_b[i+1][j+1] == anti_color:
                         pass
-                    elif ((work_b[i+1][j-1] == color and work_b[i+2][j-1] == color) or
-                    (work_b[i+1][j-1] == color and work_b[i+2][j-1] == color)):
-                        score =- 1
-        elif work_b[i][j-1] == color: # there is a match to the left
-            score -= 1
-            if i == 8:
-                if work_b[i-1][j-1] == color:
-                    score -= 1
-                    if work_b[i-1][j-2] == color:
+                    elif work_b[i+1][j-1] == color or work_b[i+1][j+1] == color:
                         score -= 1
-            elif work_b[i+1][j-1] == color:     # Fig 1
+                        if i == 7:
+                            pass
+                        elif ((work_b[i+1][j-1] == color and work_b[i+2][j-1] == anti_color) or
+                        (work_b[i+1][j+1] == color and work_b[i+2][j+1] == anti_color)):
+                            pass
+                        elif ((work_b[i+1][j-1] == color and work_b[i+2][j-1] == color) or
+                        (work_b[i+1][j+1] == color and work_b[i+2][j+1] == color)):
+                            score =- 1
+            elif work_b[i][j-1] == color: # there is a match to the left
                 score -= 1
-                if work_b[i+1][j-2] == color:
+                if i == 8:
+                    if work_b[i-1][j-1] == color:
+                        score -= 1
+                        if work_b[i-1][j-2] == color:
+                            score -= 1
+                    elif work_b[i-1][j-1] == None and work_b[i-1][j-2] == color:
+                        score -= 1
+                elif work_b[i+1][j-1] == color:     # Fig 1
                     score -= 1
-            elif work_b[i+1][j] == color:       # Fig 2
+                    if work_b[i+1][j-2] == color:
+                        score -= 1
+                    elif work_b[i+1][j-2] == anti_color:
+                        pass
+                elif work_b[i+1][j] == color:       # Fig 2_1
+                    score -= 1
+                    if work_b[i+1][j+1] == color:
+                        score -= 1
+                    elif work_b[i+1][j+1] == anti_color:
+                        pass
+                elif work_b[i-1][j-1] != None:     # Fig 2_2
+                    if work_b[i-1][j-1] == color:
+                        score -= 1
+                        if work_b[i-1][j-2] == color:
+                            score -= 1
+                        elif work_b[i-1][j-2] == anti_color:
+                            pass
+                    else:
+                        pass
+                elif work_b[i-1][j-1] == None and work_b[i-1][j-2] == color:
+                    score -= 1
+                elif work_b[i-1][j-1] == None and work_b[i-1][j-2] == anti_color:
+                    pass
+                elif work_b[i+1][j] == color:      # Fig 3
+                    score -= 1
+                    if work_b[i-1][j-1] == color:
+                        score -= 1
+                    elif work_b[i-1][j-1] == anti_color:
+                        pass
+            
+            elif work_b[i][j+1] == color: # there is a match to the right
                 score -= 1
-                if work_b[i+1][j+1] == color:
-                    score -= 1
-            elif (work_b[i+1][j] == color) or (work_b[i-1][j-1] == color):      # Fig 3
-                score -= 1
-                if (work_b[i+1][j] == color) and (work_b[i-1][j-1] == color):
-                    score -= 1
-        elif work_b[i][j+1] == color: # there is a match to the right
-            score -= 1
-            if i == 8:
-                if work_b[i-1][j+1] == color:
+                if i == 8:
+                    if work_b[i-1][j+1] == color:
+                        score -= 1 
+                        if work_b[i-1][j+2] == color:
+                            score -= 1
+                    elif work_b[i-1][j+1] == None and work_b[i-1][j+2] == color:
+                        score -= 1
+                elif work_b[i-1][j+1] == color:     # Fig 1_1
                     score -= 1 
                     if work_b[i-1][j+2] == color:
                         score -= 1
-            elif work_b[i-1][j+1] == color:     # Fig 1_1
-                score -= 1 
-                if work_b[i-1][j+2] == color:
+                elif work_b[i-1][j+1] == None and work_b[i-1][j+2] == color:
                     score -= 1
-            elif work_b[i+1][j] == color:       # Fig 1_2
-                score -= 1
-                if work_b[i+1][j-1] == color:
+                elif work_b[i-1][j+1] == None and work_b[i-1][j+2] == anti_color:
+                    pass
+                elif work_b[i+1][j] == color:       # Fig 1_2
                     score -= 1
-            elif work_b[i+1][j+1] == color:
-                score -= 1
-                if work_b[i+1][j+2] == color:
+                    if work_b[i+1][j-1] == color:
+                        score -= 1
+                    elif work_b[i+1][j-1] == anti_color:
+                        pass
+                elif work_b[i+1][j+1] == color:     # Fig 2
                     score -= 1
-            elif work_b[i+1][j] == color or work_b[i-1][j+1]:
-                score -= 1
-                if work_b[i+1][j] == color and work_b[i-1][j+1]:
+                    if work_b[i+1][j+2] == color:
+                        score -= 1
+                    elif work_b[i+1][j+2] == anti_color:
+                        score -= 1
+                elif work_b[i+1][j] == color:   # Fig 4
                     score -= 1
-        list_of_score[y] = score    
-    return list_of_score     
-    
+                    if work_b[i-1][j+1] == color:
+                        score -= 1
+                    elif work_b[i-1][j+1] == anti_color:
+                        pass
+            list_of_score[y] = score
+    for i in range (len(list_of_score)):
+        if list_of_score[i] == None:
+            list_of_score[i] = 1000
+    return list_of_score
+
+def list_add(a,b):
+    c = []
+    for i in range(len(a)):
+        c.append(a[i]+b[i])
+    return c
+
+def find_col_ai(board):
+    x_lst = ways_have_gone('X',board)
+    o_lst = ways_have_gone('O',board)
+    for i in range(len(o_lst)):     # Check myself(computer) first
+        if x_lst[i] == 0:
+            return i
+    for i in range(len(x_lst)):     # Check player later
+        if x_lst[i] == 0:
+            return i
+    ls = list_add(x_lst,o_lst)
+    index_ls = []
+    count = 0
+    for i in ls:
+        if i == min(ls):
+            count += 1
+    for i in range (count):
+        index_ls.append(ls.index(min(ls)) + i)
+        del ls[ls.index(min(ls))]
+    return index_ls[random.randint(0,len(index_ls))-1]
+
+def a_round_single(board, player_ls, cnt = 0):
+    """a_round is the function where a round of the game starts and iterates
+    This function takes 3 parameters:
+    board: the chess board that's being currently used
+    player_ls: the list of player
+    cnt: select which player to start from, default is set to 0
+    This function returns 0 or 1:
+    0 for restart the game
+    1 for quit the game
+    """
+    someone_win = False
+    while not someone_win:
+        now = cnt % 2
+        cls()
+        print("Now it's " + player_ls[now][1] + "'s turn.")
+        print_matrix(board)
+        while True:
+            if now == 1:
+                cls()
+                print("The computer played the following step.")
+                column = find_col_ai(board)
+                drop_disk(board, column, player_ls[now])
+                print_matrix(board)
+                input("Press enter to continue.")
+                if match(board):
+                    someone_win = True
+                    return win(player_ls[now][1], board)
+                if is_full(board):
+                    print("The chess board is full and no one's won the game.")
+                    return restart_or_quit()
+                break
+            else:
+                raw_cl = input("Please enter the column that you want to play. (If you want to quit, "+
+                "please enter 'q'. If you want to restart the game, please enter 'r')\n")
+                if raw_cl.isdigit() and int(raw_cl) >= 1 and int(raw_cl) <= 10:
+                    column = int(raw_cl) - 1
+                    if is_able_to_drop(column, board):
+                        drop_disk(board, column, player_ls[now])
+                        print_matrix(board)
+                        if match(board):
+                            someone_win = True
+                            return win(player_ls[now][1], board)
+                        break
+                    else:
+                        if is_full(board):
+                            print("The chess board is full and no one's won the game.")
+                            return restart_or_quit()
+                        print("This column is already full, please choose another column.")
+                elif raw_cl == 'q':
+                    return 1
+                elif raw_cl == 'r':
+                    return 0
+                else:
+                    print("Invalid input, please enter a column index between 1 and 10.")
+        cnt += 1
+    return 1 # exit the program
+
     
 def main():
     """Here to start this module from the console or shell. """
@@ -358,8 +512,13 @@ def main():
                 row.append(None) 
             board.append(row)
         # player_list = [['Player 1', 'Marshall', 'X'], ['Player 2', 'Mathers', 'O']]  # Testing
-        if a_round(board, player_list) == 1:
-            break
+        if player_list[1][1] == "Computer":
+            if a_round_single(board, player_list) == 1:
+                break
+        else:
+            if a_round(board, player_list) == 1:
+                break
+
 
             
 if __name__ == '__main__':
