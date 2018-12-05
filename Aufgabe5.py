@@ -7,7 +7,7 @@ Tutor: Felix Lapp
 This is a simple python implementation of a modified version of 
 the game "Connect Four"
 """
-import os, copy, sys
+import os, copy, sys, random
 
 __author__ = "6815480: Liming Kuang, 5613641: Melanie Wester"  
 __credits__ = "" 
