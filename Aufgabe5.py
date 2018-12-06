@@ -85,7 +85,6 @@ def is_full(board):
             return False
     return True
     
-    
 def is_able_to_drop(col, board):
     """is_able_to_drop is a function to check if this column is valid for dropping a disk
     board: the chess board that's being currently used
@@ -96,24 +95,6 @@ def is_able_to_drop(col, board):
     else:
         return False
 
-    
-def where_to_drop(board, column):
-    """It returns the i in the (i,j) where the Player would be able to drop next""" 
-    for i in range (0,9):
-        if i <= 7 and board[i][column] == None and board[i+1][column] != None:
-            return i
-        elif i == 8 and board[i][column] == None:
-            return i
-
-        
-def to_check_list(board):
-    """It returns every (i,j) where the Computer would
-    be able to drop next"""
-    list_to_check = []
-    for i in range (10):
-        list_to_check.append((where_to_drop(board, i),i))
-    return list_to_check
-    
     
 def drop_disk(board, column, player):
     """drop_disk is a function to play a disk at the top of a specific column
@@ -129,7 +110,6 @@ def drop_disk(board, column, player):
             board[i][column] = player[2]
         elif i == 8 and board[i][column] == None:
             board[i][column] = player[2]
-
 
 # ◉◎
 def print_matrix(lst):
@@ -147,7 +127,7 @@ def print_matrix(lst):
                 lst_out[i][j] = ''
     print("1\t2\t3\t4\t5\t6\t7\t8\t9\t10")
     print('\n'.join(['\t'.join([str(i) for i in row]) for row in lst_out]))
-    
+
 def match(b):
     """match is a function to determine if any one of the players has won the game.
     It takes the baord and the location of the last played disk as parameters.
@@ -202,7 +182,6 @@ def match(b):
                         flag = True
     return flag
 
-
 def restart_or_quit():
     """restart_or_quit is a function that determines if the player wants to restart the game,
     or quit it. It takes no parameter and returns 0 or 1:
@@ -220,7 +199,6 @@ def restart_or_quit():
         else:
             print("This input is invalid.")
             
-            
 def win(player_name, board):
     """win is a function that determines what to do when one player has won the game.
     This function takes 2 parameters:
@@ -235,9 +213,9 @@ def win(player_name, board):
     print_matrix(board)
     return restart_or_quit()
 
-
 def a_round(board, player_ls, cnt = 0):
-    """a_round is the function where a round of the game starts and iterates
+    """a_round is the function where a round of the game starts and iterates for 
+    double players mode.
     This function takes 3 parameters:
     board: the chess board that's being currently used
     player_ls: the list of player
@@ -278,9 +256,12 @@ def a_round(board, player_ls, cnt = 0):
         cnt += 1
     return 1 # exit the program
 
-
 def where_to_drop(board, column):
-    """It returns the i in (i,j) of the point"""
+    """where_to_drop is a function that returns the i in (i,j) of the point,
+    where the computer could drop the next disk in this column.
+    board: the chess board that's being currently used
+    column: the column that the computer want to drop the next disk
+    """
     for i in range (0,9):
         if i <= 7 and board[i][column] == None and board[i+1][column] != None:
             return i
@@ -288,14 +269,22 @@ def where_to_drop(board, column):
             return i
 
 def to_check_list(board):
+    """to_check_list generates a list of coordinates, where the computer should
+    be calculating to anticipate the score of each point. It returns a list of tuples.
+    board: the chess board that's being currently used
+    """
     list_to_check = []
     for i in range (10):
         list_to_check.append((where_to_drop(board, i),i))
     return list_to_check
 
 def ways_have_gone(color, board):
-    """ways_have_gone is a function for the KI which scores each field (i,j) based on 
-    how many coins are left to make a win"""
+    """ways_have_gone is a function that generates a list of scores on each point, 
+    where is possible to be played in the next round for the computer or player.
+    color: is either 'X' or 'O', which indicates which player we are currently conducting
+    the anticipation algorithm on.
+    board: the chess board that's being currently used
+    """
     list_to_check = to_check_list(board)
     for (i, j) in list_to_check:
         if i == None:
@@ -418,12 +407,20 @@ def ways_have_gone(color, board):
     return list_of_score
 
 def list_add(a,b):
+    """a simple function to add each element of two lists together.
+    It returns a list, in which each element is the sum of the 2 input list 
+    in corresponding position.
+    """
     c = []
     for i in range(len(a)):
         c.append(a[i]+b[i])
     return c
 
 def find_col_ai(board):
+    """find_col_ai is a function to determine in which column should the computer play next.
+    It returns an int, which is the column.
+    board: the chess board that's being currently used
+    """
     x_lst = ways_have_gone('X',board)
     o_lst = ways_have_gone('O',board)
     for i in range(len(o_lst)):     # Check myself(computer) first
@@ -444,7 +441,8 @@ def find_col_ai(board):
     return index_ls[random.randint(0,len(index_ls))-1]
 
 def a_round_single(board, player_ls, cnt = 0):
-    """a_round is the function where a round of the game starts and iterates
+    """a_round_single is the function where a round of the game starts and iterates for 
+    single player mode.
     This function takes 3 parameters:
     board: the chess board that's being currently used
     player_ls: the list of player
@@ -500,7 +498,6 @@ def a_round_single(board, player_ls, cnt = 0):
         cnt += 1
     return 1 # exit the program
 
-    
 def main():
     """Here to start this module from the console or shell. """
     player_list = choose_players()  # gives a list with players name and which coin they uses
@@ -519,14 +516,15 @@ def main():
             if a_round(board, player_list) == 1:
                 break
 
-
             
 if __name__ == '__main__':
     main()
-    
 
+    
 '''
 SOURCES:
 http://www.lojol.de/html/4gewinnt.html
 https://www.youtube.com/watch?v=XOga3EhS59c
 '''
+
+    
